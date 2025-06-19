@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proces Tjekliste - Informationssøgning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .progress-section {
+            margin-bottom: 30px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-fill.complete {
+            background-color: #10b981;
+        }
+        
+        .progress-percentage {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        .progress-percentage.complete {
+            color: #10b981;
+        }
+        
+        .reset-button {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        
+        .reset-button:hover {
+            background: #e5e7eb;
+        }
+        
+        .success-message {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .success-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #065f46;
+            font-weight: 600;
+        }
+        
+        .steps-container {
+            margin-top: 20px;
+        }
+        
+        .step {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .step:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step.completed {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .step-icon {
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+        
+        .step-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .step-text {
+            flex-grow: 1;
+        }
+        
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .step.completed .step-title {
+            color: #065f46;
+        }
+        
+        .step-description {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .step.completed .step-description {
+            color: #047857;
+        }
+        
+        .step-link {
+            color: #3b82f6;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .step-link:hover {
+            text-decoration: none;
+            color: #1d4ed8;
+        }
+        
+        .step.completed .step-link {
+            color: #059669;
+        }
+        
+        .step.completed .step-link:hover {
+            color: #047857;
+        }
+        
+        .tip-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .icon-circle {
+            fill: none;
+            stroke: #9ca3af;
+            stroke-width: 2;
+        }
+        
+        .icon-check {
+            fill: none;
+            stroke: #059669;
+            stroke-width: 2;
+        }
+        
+        .icon-reset {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .icon-success {
+            fill: none;
+            stroke: #059669;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-section">
+            <h1>Proces Tjekliste - Informationssøgning</h1>
+            
+            <div class="progress-header">
+                <span>Fremgang</span>
+                <span id="progress-text">0/8 trin</span>
+            </div>
+            
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            
+            <div id="progress-percentage" class="progress-percentage">0% færdig</div>
+            
+            <button class="reset-button" onclick="resetAll()">
+                <svg class="icon-reset" width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                    <path d="M21 3v5h-5"></path>
+                </svg>
+                Nulstil alle
+            </button>
+        </div>
+        
+        <div id="success-message" class="success-message">
+            <div class="success-content">
+                <svg class="icon-success" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+                Fantastisk! Du har gennemført alle trin i processen.
+            </div>
+        </div>
+        
+        <div class="steps-container">
+            <div class="step" onclick="toggleStep(1)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-1" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">1. Hvad leder du efter?</h3>
+                        <p class="step-description">Ved du præcis, hvad du vil søge efter? Hvis ikke, så start her.</p>
+                        <a href="https://regionh.sharepoint.com/sites/82406c91-4a16-4a96-9127-943545e93f7b/SitePages/V%C3%A6lg-emne.aspx" 
+                           target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(2)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-2" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">2. Afdelingens viden</h3>
+                        <p class="step-description">Har du styr på den viden vi allerede har i afdelingen?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(3)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-3" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">3. Find hjemmesider og rapporter</h3>
+                        <p class="step-description">Har du fundet information på relevante hjemmesider?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(4)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-4" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">4. Find forskning</h3>
+                        <p class="step-description">Har du søgt efter forskning på området?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(5)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-5" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">5. Involvér fagperson(er)</h3>
+                        <p class="step-description">Har du behov for at involvere en fagperson?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(6)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-6" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">6. Kilder og referencer</h3>
+                        <p class="step-description">Er det svært at få styr på, hvor din viden kommer fra?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(7)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-7" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">7. Vurdér informationen</h3>
+                        <p class="step-description">Er du i tvivl, om informationen er til at stole på?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(8)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-8" class="icon-circle" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">8. Formidling</h3>
+                        <p class="step-description">Er du klar til at sende budskabet videre?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tip-box">
+            <strong>Tip:</strong> Klik på hvert trin for at markere det som færdigt. 
+            Du kan altid gå tilbage og ændre status på trinene.
+        </div>
+    </div>
+
+    <script>
+        let completedSteps = new Set();
+        const totalSteps = 8;
+
+        function toggleStep(stepId) {
+            const stepElement = document.querySelector(`.step:nth-child(${stepId})`);
+            const iconElement = document.getElementById(`icon-${stepId}`);
+            
+            if (completedSteps.has(stepId)) {
+                // Remove from completed steps
+                completedSteps.delete(stepId);
+                stepElement.classList.remove('completed');
+                iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+                iconElement.setAttribute('class', 'icon-circle');
+            } else {
+                // Add to completed steps
+                completedSteps.add(stepId);
+                stepElement.classList.add('completed');
+                iconElement.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path>';
+                iconElement.setAttribute('class', 'icon-check');
+            }
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const completed = completedSteps.size;
+            const percentage = Math.round((completed / totalSteps) * 100);
+            const isComplete = completed === totalSteps;
+            
+            // Update progress bar
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = `${percentage}%`;
+            
+            if (isComplete) {
+                progressFill.classList.add('complete');
+            } else {
+                progressFill.classList.remove('complete');
+            }
+            
+            // Update progress text
+            document.getElementById('progress-text').textContent = `${completed}/${totalSteps} trin`;
+            
+            // Update percentage
+            const percentageElement = document.getElementById('progress-percentage');
+            percentageElement.textContent = `${percentage}% færdig`;
+            
+            if (isComplete) {
+                percentageElement.classList.add('complete');
+            } else {
+                percentageElement.classList.remove('complete');
+            }
+            
+            // Show/hide success message
+            const successMessage = document.getElementById('success-message');
+            if (isComplete) {
+                successMessage.classList.add('show');
+            } else {
+                successMessage.classList.remove('show');
+            }
+        }
+
+        function resetAll() {
+            completedSteps.clear();
+            
+            // Reset all step elements
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepElement = document.querySelector(`.step:nth-child(${i})`);
+                const iconElement = document.getElementById(`icon-${i}`);
+                
+                stepElement.classList.remove('completed');
+                iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+                iconElement.setAttribute('class', 'icon-circle');
+            }
+            
+            updateProgress();
+        }
+
+        // Initialize progress on page load
+        updateProgress();
+    </script>
+</body>
+</html>
