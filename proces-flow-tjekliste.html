@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proces Guide - Informationssøgning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .progress-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .step-circle.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .step-circle.completed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .step-line {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+        
+        .step-line.completed {
+            background: #10b981;
+        }
+        
+        .step-label {
+            font-size: 0.7rem;
+            color: #666;
+            text-align: center;
+            max-width: 60px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .main-content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .page {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            min-height: 500px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .page-title {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .page-content {
+            margin-bottom: 40px;
+        }
+        
+        .page-description {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .help-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .help-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .help-content {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .help-link {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .help-link:hover {
+            background: #2563eb;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+        
+        .nav-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .nav-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .nav-button.secondary {
+            background: #6b7280;
+        }
+        
+        .nav-button.secondary:hover {
+            background: #4b5563;
+        }
+        
+        .completion-status {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .status-complete {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        
+        .status-incomplete {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            color: #92400e;
+        }
+        
+        .complete-button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 20px 10px;
+            transition: background 0.2s;
+        }
+        
+        .complete-button:hover {
+            background: #059669;
+        }
+        
+        .start-page {
+            text-align: center;
+        }
+        
+        .start-description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .step-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .preview-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .preview-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .final-page {
+            text-align: center;
+        }
+        
+        .celebration {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .restart-button {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 20px 10px;
+            transition: background 0.2s;
+        }
+        
+        .restart-button:hover {
+            background: #7c3aed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header with Progress -->
+    <div class="header">
+        <div class="header-content">
+            <h1>Proces Guide - Informationssøgning</h1>
+            <div class="progress-container">
+                <div class="progress-steps">
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-0">S</div>
+                        <div class="step-label">Start</div>
+                    </div>
+                    <div class="step-line" id="line-0"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-1">1</div>
+                        <div class="step-label">Søgning</div>
+                    </div>
+                    <div class="step-line" id="line-1"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-2">2</div>
+                        <div class="step-label">Viden</div>
+                    </div>
+                    <div class="step-line" id="line-2"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-3">3</div>
+                        <div class="step-label">Hjemmesider</div>
+                    </div>
+                    <div class="step-line" id="line-3"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-4">4</div>
+                        <div class="step-label">Forskning</div>
+                    </div>
+                    <div class="step-line" id="line-4"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-5">5</div>
+                        <div class="step-label">Fagperson</div>
+                    </div>
+                    <div class="step-line" id="line-5"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-6">6</div>
+                        <div class="step-label">Referencer</div>
+                    </div>
+                    <div class="step-line" id="line-6"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-7">7</div>
+                        <div class="step-label">Vurdering</div>
+                    </div>
+                    <div class="step-line" id="line-7"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-8">8</div>
+                        <div class="step-label">Formidling</div>
+                    </div>
+                    <div class="step-line" id="line-8"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-circle" id="step-9">✓</div>
+                        <div class="step-label">Færdig</div>
+                    </div>
+                </div>
+                <div class="progress-text" id="progress-text">Klar til at starte</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        
+        <!-- Start Page -->
+        <div class="page active start-page" id="page-0">
+            <h2 class="page-title">Velkommen til Informationssøgnings-guiden</h2>
+            <p class="start-description">
+                Denne guide hjælper dig gennem en struktureret proces for at finde, vurdere og formidle information. 
+                Du vil blive ført gennem 8 trin, der sikrer en grundig og systematisk tilgang.
+            </p>
+            
+            <div class="step-preview">
+                <h3 class="preview-title">De 8 trin du vil gennemgå:</h3>
+                <div class="preview-steps">
+                    <div>1. Hvad leder du efter?</div>
+                    <div>2. Afdelingens viden</div>
+                    <div>3. Find hjemmesider og rapporter</div>
+                    <div>4. Find forskning</div>
+                    <div>5. Involvér fagperson(er)</div>
+                    <div>6. Kilder og referencer</div>
+                    <div>7. Vurdér informationen</div>
+                    <div>8. Formidling</div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <div></div>
+                <button class="nav-button" onclick="nextPage()">
+                    Start processen →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="page" id="page-1">
+            <h2 class="page-title">1. Hvad leder du efter?</h2>
+            <p class="page-description">Ved du præcis, hvad du vil søge efter? Hvis ikke, så start her.</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Før du begynder at søge</h3>
+                <div class="help-content">
+                    Det er vigtigt at have en klar forståelse af, hvad du søger efter. Tag dig tid til at definere dit spørgsmål præcist, 
+                    så du kan søge mere effektivt og få bedre resultater.
+                </div>
+                <a href="https://regionh.sharepoint.com/sites/82406c91-4a16-4a96-9127-943545e93f7b/SitePages/V%C3%A6lg-emne.aspx" 
+                   target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-1">
+                    Når du har klargjort dit søgespørgsmål, kan du gå videre til næste trin.
+                </div>
+                <button class="complete-button" onclick="markComplete(1)">Jeg har klargjort mit søgespørgsmål</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-1" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="page" id="page-2">
+            <h2 class="page-title">2. Afdelingens viden</h2>
+            <p class="page-description">Har du styr på den viden vi allerede har i afdelingen?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Undersøg eksisterende ressourcer</h3>
+                <div class="help-content">
+                    Tjek om der allerede findes relevant information i afdelingen. Dette kan spare dig for tid og give dig et godt udgangspunkt 
+                    for din videre søgning.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-2">
+                    Når du har undersøgt afdelingens eksisterende viden, kan du fortsætte.
+                </div>
+                <button class="complete-button" onclick="markComplete(2)">Jeg har tjekket afdelingens viden</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-2" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="page" id="page-3">
+            <h2 class="page-title">3. Find hjemmesider og rapporter</h2>
+            <p class="page-description">Har du fundet information på relevante hjemmesider?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Søg på autoritære hjemmesider</h3>
+                <div class="help-content">
+                    Find relevante informationer på troværdige hjemmesider og i officielle rapporter. 
+                    Fokuser på autoritære kilder som myndigheder, organisationer og ekspertinstitutioner.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-3">
+                    Når du har fundet relevante hjemmesider og rapporter, kan du gå videre.
+                </div>
+                <button class="complete-button" onclick="markComplete(3)">Jeg har fundet relevante hjemmesider</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-3" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="page" id="page-4">
+            <h2 class="page-title">4. Find forskning</h2>
+            <p class="page-description">Har du søgt efter forskning på området?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Søg efter videnskabelig litteratur</h3>
+                <div class="help-content">
+                    Undersøg om der findes peer-reviewed forskning, studier eller akademiske publikationer, 
+                    der kan understøtte eller udvide din viden om emnet.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-4">
+                    Når du har søgt efter relevant forskning, kan du fortsætte.
+                </div>
+                <button class="complete-button" onclick="markComplete(4)">Jeg har søgt efter forskning</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-4" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="page" id="page-5">
+            <h2 class="page-title">5. Involvér fagperson(er)</h2>
+            <p class="page-description">Har du behov for at involvere en fagperson?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Søg ekspertbistand</h3>
+                <div class="help-content">
+                    Overvej om du har behov for input fra fagpersoner eller eksperter på området. 
+                    Dette kan give dig værdifuld viden og perspektiver, som du ikke kan finde i skriftlige kilder.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-5">
+                    Når du har vurderet behovet for fagpersoner, kan du gå videre.
+                </div>
+                <button class="complete-button" onclick="markComplete(5)">Jeg har vurderet behov for fagpersoner</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-5" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="page" id="page-6">
+            <h2 class="page-title">6. Kilder og referencer</h2>
+            <p class="page-description">Er det svært at få styr på, hvor din viden kommer fra?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Organiser dine kilder</h3>
+                <div class="help-content">
+                    Sørg for at have styr på alle dine kilder og referencer. 
+                    Dette er vigtigt for troværdigheden og for at andre kan verificere din information.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-6">
+                    Når du har organiseret dine kilder og referencer, kan du fortsætte.
+                </div>
+                <button class="complete-button" onclick="markComplete(6)">Jeg har styr på mine kilder</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-6" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="page" id="page-7">
+            <h2 class="page-title">7. Vurdér informationen</h2>
+            <p class="page-description">Er du i tvivl, om informationen er til at stole på?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Kvalitetsvurdering</h3>
+                <div class="help-content">
+                    Vurdér kvaliteten og troværdigheden af den information, du har fundet. 
+                    Tjek kilders autoritet, aktualitet og relevans for dit formål.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-7">
+                    Når du har vurderet informationens troværdighed, kan du gå videre.
+                </div>
+                <button class="complete-button" onclick="markComplete(7)">Jeg har vurderet informationen</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-7" disabled>Næste trin →</button>
+            </div>
+        </div>
+
+        <!-- Step 8 -->
+        <div class="page" id="page-8">
+            <h2 class="page-title">8. Formidling</h2>
+            <p class="page-description">Er du klar til at sende budskabet videre?</p>
+            
+            <div class="help-section">
+                <h3 class="help-title">Forbered din formidling</h3>
+                <div class="help-content">
+                    Tænk over hvordan du bedst formidler din viden til målgruppen. 
+                    Overvej format, sprog og de vigtigste budskaber, du vil frem med.
+                </div>
+                <a href="#" target="_blank" class="help-link">Få hjælp her</a>
+            </div>
+            
+            <div class="completion-status">
+                <div class="status-message status-incomplete" id="status-8">
+                    Når du er klar til at formidle din viden, kan du afslutte processen.
+                </div>
+                <button class="complete-button" onclick="markComplete(8)">Jeg er klar til formidling</button>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="nav-button" onclick="nextPage()" id="next-8" disabled>Afslut processen →</button>
+            </div>
+        </div>
+
+        <!-- Final Page -->
+        <div class="page final-page" id="page-9">
+            <div class="celebration">🎉</div>
+            <h2 class="page-title">Tillykke!</h2>
+            <p class="page-description">
+                Du har gennemført alle 8 trin i informationssøgnings-processen. 
+                Du skulle nu have en solid foundation for at formidle troværdig og velunderbygget information.
+            </p>
+            
+            <div class="step-preview">
+                <h3 class="preview-title">Hvad du har opnået:</h3>
+                <div class="preview-steps">
+                    <div>✓ Klargjort dit søgespørgsmål</div>
+                    <div>✓ Undersøgt eksisterende viden</div>
+                    <div>✓ Fundet relevante hjemmesider</div>
+                    <div>✓ Søgt efter forskning</div>
+                    <div>✓ Vurderet behov for eksperter</div>
+                    <div>✓ Organiseret kilder</div>
+                    <div>✓ Kvalitetsvurderet information</div>
+                    <div>✓ Forberedt formidling</div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-button secondary" onclick="prevPage()">← Tilbage</button>
+                <button class="restart-button" onclick="restartProcess()">Start forfra</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        let completedSteps = new Set();
+        const totalSteps = 8;
+
+        function updateProgress() {
+            // Update step circles and lines
+            for (let i = 0; i <= totalSteps + 1; i++) {
+                const stepCircle = document.getElementById(`step-${i}`);
+                const stepLine = document.getElementById(`line-${i}`);
+                
+                if (stepCircle) {
+                    stepCircle.classList.remove('active', 'completed');
+                    if (i < currentPage) {
+                        stepCircle.classList.add('completed');
+                    } else if (i === currentPage) {
+                        stepCircle.classList.add('active');
+                    }
+                }
+                
+                if (stepLine) {
+                    stepLine.classList.remove('completed');
+                    if (i < currentPage) {
+                        stepLine.classList.add('completed');
+                    }
+                }
+            }
+            
+            // Update progress text
+            const progressText = document.getElementById('progress-text');
+            if (currentPage === 0) {
+                progressText.textContent = 'Klar til at starte';
+            } else if (currentPage === totalSteps + 1) {
+                progressText.textContent = 'Processen er færdig!';
+            } else {
+                progressText.textContent = `Trin ${currentPage} af ${totalSteps} - ${completedSteps.size} trin gennemført`;
+            }
+        }
+
+        function showPage(pageNum) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show current page
+            document.getElementById(`page-${pageNum}`).classList.add('active');
+            
+            currentPage = pageNum;
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function nextPage() {
+            if (currentPage < totalSteps + 1) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function markComplete(stepNum) {
+            completedSteps.add(stepNum);
+            
+            // Update status message
+            const statusElement = document.getElementById(`status-${stepNum}`);
+            statusElement.textContent = 'Dette trin er nu gennemført. Du kan gå videre til næste trin.';
+            statusElement.classList.remove('status-incomplete');
+            statusElement.classList.add('status-complete');
+            
+            // Enable next button
+            const nextButton = document.getElementById(`next-${stepNum}`);
+            if (nextButton) {
+                nextButton.disabled = false;
+            }
+            
+            updateProgress();
+        }
+
+        function restartProcess() {
+            currentPage = 0;
+            completedSteps.clear();
+            
+            // Reset all status messages
+            for (let i = 1; i <= totalSteps; i++) {
+                const statusElement = document.getElementById(`status-${i}`);
+                statusElement.classList.remove('status-complete');
+                statusElement.classList.add('status-incomplete');
+                
+                const nextButton = document.getElementById(`next-${i}`);
+                if (nextButton) {
+                    nextButton.disabled = true;
+                }
+            }
+            
+            // Reset status texts
+            document.getElementById('status-1').textContent = 'Når du har klargjort dit søgespørgsmål, kan du gå videre til næste trin.';
+            document.getElementById('status-2').textContent = 'Når du har undersøgt afdelingens eksisterende viden, kan du fortsætte.';
+            document.getElementById('status-3').textContent = 'Når du har fundet relevante hjemmesider og rapporter, kan du gå videre.';
+            document.getElementById('status-4').textContent = 'Når du har søgt efter relevant forskning, kan du fortsætte.';
+            document.getElementById('status-5').textContent = 'Når du har vurderet behovet for fagpersoner, kan du gå videre.';
+            document.getElementById('status-6').textContent = 'Når du har organiseret dine kilder og referencer, kan du fortsætte.';
+            document.getElementById('status-7').textContent = 'Når du har vurderet informationens troværdighed, kan du gå videre.';
+            document.getElementById('status-8').textContent = 'Når du er klar til at formidle din viden, kan du afslutte processen.';
+            
+            showPage(0);
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
