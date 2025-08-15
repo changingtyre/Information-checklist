@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proces Tjekliste - Informationssøgning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .progress-section {
+            margin-bottom: 30px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-fill.complete {
+            background-color: #10b981;
+        }
+        
+        .progress-percentage {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        .progress-percentage.complete {
+            color: #10b981;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn-reset {
+            background: #f3f4f6;
+            color: #666;
+        }
+        
+        .btn-reset:hover {
+            background: #e5e7eb;
+        }
+        
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #059669;
+        }
+        
+        .btn-load {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-load:hover {
+            background: #2563eb;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .success-message {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .success-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #065f46;
+            font-weight: 600;
+        }
+        
+        .steps-container {
+            margin-top: 20px;
+        }
+        
+        .step {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .step:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step.completed {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .step-icon {
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+        
+        .step-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .step-text {
+            flex-grow: 1;
+        }
+        
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .step.completed .step-title {
+            color: #065f46;
+        }
+        
+        .step-description {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .step.completed .step-description {
+            color: #047857;
+        }
+        
+        .step-link {
+            color: #3b82f6;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .step-link:hover {
+            text-decoration: none;
+            color: #1d4ed8;
+        }
+        
+        .step.completed .step-link {
+            color: #059669;
+        }
+        
+        .step.completed .step-link:hover {
+            color: #047857;
+        }
+        
+        .input-fields {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-field.small {
+            max-width: 300px;
+        }
+        
+        .textarea-field {
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .tip-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+        
+        .notification.success {
+            background-color: #10b981;
+        }
+        
+        .notification.error {
+            background-color: #ef4444;
+        }
+        
+        .notification.info {
+            background-color: #3b82f6;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-section">
+            <h1>Proces Tjekliste - Informationssøgning</h1>
+            
+            <div class="progress-header">
+                <span>Fremgang</span>
+                <span id="progress-text">0/8 trin</span>
+            </div>
+            
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            
+            <div id="progress-percentage" class="progress-percentage">0% færdig</div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-reset" onclick="resetAll()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                        <path d="M21 3v5h-5"></path>
+                    </svg>
+                    Nulstil alle
+                </button>
+                
+                <button class="btn btn-save" onclick="saveProject()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17,21 17,13 7,13 7,21"></polyline>
+                        <polyline points="7,3 7,8 15,8"></polyline>
+                    </svg>
+                    Gem projekt
+                </button>
+                
+                <button class="btn btn-load" onclick="document.getElementById('file-input').click()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14,2 14,8 20,8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10,9 9,9 8,9"></polyline>
+                    </svg>
+                    Indlæs projekt
+                </button>
+            </div>
+            
+            <input type="file" id="file-input" class="file-input" accept=".json" onchange="loadProject(event)">
+        </div>
+        
+        <div id="success-message" class="success-message">
+            <div class="success-content">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+                Fantastisk! Du har gennemført alle trin i processen.
+            </div>
+        </div>
+        
+        <div class="steps-container">
+            <div class="step" onclick="toggleStep(1)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-1" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">1. Hvad leder du efter?</h3>
+                        <p class="step-description">Ved du præcis, hvad du vil søge efter? Hvis ikke, så start her.</p>
+                        <a href="https://regionh.sharepoint.com/sites/82406c91-4a16-4a96-9127-943545e93f7b/SitePages/V%C3%A6lg-emne.aspx" 
+                           target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-1">Ansvarlig person:</label>
+                                <input type="text" id="responsible-1" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(1, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-1">Noter:</label>
+                                <textarea id="notes-1" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(1, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(2)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">2. Afdelingens viden</h3>
+                        <p class="step-description">Har du styr på den viden vi allerede har i afdelingen?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-2">Ansvarlig person:</label>
+                                <input type="text" id="responsible-2" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(2, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-2">Noter:</label>
+                                <textarea id="notes-2" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(2, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(3)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">3. Find hjemmesider og rapporter</h3>
+                        <p class="step-description">Har du fundet information på relevante hjemmesider?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-3">Ansvarlig person:</label>
+                                <input type="text" id="responsible-3" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(3, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-3">Noter:</label>
+                                <textarea id="notes-3" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(3, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(4)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">4. Find forskning</h3>
+                        <p class="step-description">Har du søgt efter forskning på området?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-4">Ansvarlig person:</label>
+                                <input type="text" id="responsible-4" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(4, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-4">Noter:</label>
+                                <textarea id="notes-4" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(4, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(5)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">5. Involvér fagperson(er)</h3>
+                        <p class="step-description">Har du behov for at involvere en fagperson?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-5">Ansvarlig person:</label>
+                                <input type="text" id="responsible-5" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(5, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-5">Noter:</label>
+                                <textarea id="notes-5" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(5, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(6)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">6. Kilder og referencer</h3>
+                        <p class="step-description">Er det svært at få styr på, hvor din viden kommer fra?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-6">Ansvarlig person:</label>
+                                <input type="text" id="responsible-6" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(6, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-6">Noter:</label>
+                                <textarea id="notes-6" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(6, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(7)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-7" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">7. Vurdér informationen</h3>
+                        <p class="step-description">Er du i tvivl, om informationen er til at stole på?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-7">Ansvarlig person:</label>
+                                <input type="text" id="responsible-7" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(7, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-7">Noter:</label>
+                                <textarea id="notes-7" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(7, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step" onclick="toggleStep(8)">
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg id="icon-8" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-text">
+                        <h3 class="step-title">8. Formidling</h3>
+                        <p class="step-description">Er du klar til at sende budskabet videre?</p>
+                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        
+                        <div class="input-fields" onclick="event.stopPropagation()">
+                            <div class="input-group">
+                                <label class="input-label" for="responsible-8">Ansvarlig person:</label>
+                                <input type="text" id="responsible-8" class="input-field small" 
+                                       placeholder="Hvem er ansvarlig for dette trin?" 
+                                       onchange="saveData(8, 'responsible', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="notes-8">Noter:</label>
+                                <textarea id="notes-8" class="input-field textarea-field" 
+                                          placeholder="Skriv dine noter og overvejelser her..."
+                                          onchange="saveData(8, 'notes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tip-box">
+            <strong>Tip:</strong> Klik på hvert trin for at markere det som færdigt. 
+            Dine ændringer gemmes automatisk i browseren. Brug "Gem projekt" for at downloade en sikkerhedskopi 
+            eller "Indlæs projekt" for at genindlæse gemte data.
+        </div>
+    </div>
+
+    <script>
+        let completedSteps = new Set();
+        let stepData = {};
+        const totalSteps = 8;
+
+        // Initialize data storage
+        function initializeData() {
+            for (let i = 1; i <= totalSteps; i++) {
+                stepData[i] = {
+                    responsible: '',
+                    notes: ''
+                };
+            }
+        }
+
+        // Save data for a step
+        function saveData(stepNum, field, value) {
+            if (!stepData[stepNum]) {
+                stepData[stepNum] = { responsible: '', notes: '' };
+            }
+            stepData[stepNum][field] = value;
+            saveToLocalStorage();
+        }
+
+        // Save to LocalStorage
+        function saveToLocalStorage() {
+            const projectData = {
+                completedSteps: Array.from(completedSteps),
+                stepData: stepData,
+                savedAt: new Date().toISOString()
+            };
+            try {
+                localStorage.setItem('processTjekliste', JSON.stringify(projectData));
+            } catch (e) {
+                console.log('LocalStorage not available');
+            }
+        }
+
+        // Load from LocalStorage
+        function loadFromLocalStorage() {
+            try {
+                const savedData = localStorage.getItem('processTjekliste');
+                if (savedData) {
+                    const projectData = JSON.parse(savedData);
+                    completedSteps = new Set(projectData.completedSteps || []);
+                    stepData = projectData.stepData || {};
+                    restoreUIState();
+                    return true;
+                }
+            } catch (e) {
+                console.log('Error loading from LocalStorage');
+            }
+            return false;
+        }
+
+        // Toggle step completion
+        function toggleStep(stepId) {
+            const stepElement = document.querySelector(`.step:nth-child(${stepId})`);
+            const iconElement = document.getElementById(`icon-${stepId}`);
+            
+            if (completedSteps.has(stepId)) {
+                completedSteps.delete(stepId);
+                stepElement.classList.remove('completed');
+                iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+                iconElement.setAttribute('stroke', '#9ca3af');
+            } else {
+                completedSteps.add(stepId);
+                stepElement.classList.add('completed');
+                iconElement.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path>';
+                iconElement.setAttribute('stroke', '#059669');
+            }
+            
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        // Update progress display
+        function updateProgress() {
+            const completed = completedSteps.size;
+            const percentage = Math.round((completed / totalSteps) * 100);
+            const isComplete = completed === totalSteps;
+            
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = `${percentage}%`;
+            
+            if (isComplete) {
+                progressFill.classList.add('complete');
+            } else {
+                progressFill.classList.remove('complete');
+            }
+            
+            document.getElementById('progress-text').textContent = `${completed}/${totalSteps} trin`;
+            
+            const percentageElement = document.getElementById('progress-percentage');
+            percentageElement.textContent = `${percentage}% færdig`;
+            
+            if (isComplete) {
+                percentageElement.classList.add('complete');
+            } else {
+                percentageElement.classList.remove('complete');
+            }
+            
+            const successMessage = document.getElementById('success-message');
+            if (isComplete) {
+                successMessage.classList.add('show');
+            } else {
+                successMessage.classList.remove('show');
+            }
+        }
+
+        // Reset all data
+        function resetAll() {
+            if (confirm('Er du sikker på at du vil nulstille alle data? Dette kan ikke fortrydes.')) {
+                completedSteps.clear();
+                initializeData();
+                
+                for (let i = 1; i <= totalSteps; i++) {
+                    const stepElement = document.querySelector(`.step:nth-child(${i})`);
+                    const iconElement = document.getElementById(`icon-${i}`);
+                    
+                    stepElement.classList.remove('completed');
+                    iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+                    iconElement.setAttribute('stroke', '#9ca3af');
+                    
+                    const responsibleField = document.getElementById(`responsible-${i}`);
+                    const notesField = document.getElementById(`notes-${i}`);
+                    if (responsibleField) responsibleField.value = '';
+                    if (notesField) notesField.value = '';
+                }
+                
+                updateProgress();
+                saveToLocalStorage();
+                showNotification('Alle data er nulstillet.', 'info');
+            }
+        }
+
+        // Save project to file
+        function saveProject() {
+            const projectData = {
+                completedSteps: Array.from(completedSteps),
+                stepData: stepData,
+                savedAt: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(projectData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            link.download = `proces-tjekliste-${dateStr}.json`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Projekt gemt! Filen er downloadet.', 'success');
+        }
+
+        // Load project from file
+        function loadProject(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const projectData = JSON.parse(e.target.result);
+                    
+                    if (!projectData.completedSteps || !projectData.stepData) {
+                        throw new Error('Invalid file format');
+                    }
+                    
+                    completedSteps = new Set(projectData.completedSteps);
+                    stepData = projectData.stepData;
+                    
+                    restoreUIState();
+                    saveToLocalStorage();
+                    
+                    showNotification('Projekt indlæst succesfuldt!', 'success');
+                    
+                } catch (error) {
+                    showNotification('Fejl ved indlæsning af fil. Kontroller at det er den rigtige filtype.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // Restore UI state
+        function restoreUIState() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepElement = document.querySelector(`.step:nth-child(${i})`);
+                const iconElement = document.getElementById(`icon-${i}`);
+                
+                if (completedSteps.has(i)) {
+                    stepElement.classList.add('completed');
+                    iconElement.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path>';
+                    iconElement.setAttribute('stroke', '#059669');
+                } else {
+                    stepElement.classList.remove('completed');
+                    iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+                    iconElement.setAttribute('stroke', '#9ca3af');
+                }
+                
+                const responsibleField = document.getElementById(`responsible-${i}`);
+                const notesField = document.getElementById(`notes-${i}`);
+                
+                if (responsibleField && stepData[i]) {
+                    responsibleField.value = stepData[i].responsible || '';
+                }
+                if (notesField && stepData[i]) {
+                    notesField.value = stepData[i].notes || '';
+                }
+            }
+            
+            updateProgress();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize
+        initializeData();
+        
+        if (!loadFromLocalStorage()) {
+            updateProgress();
+        }
+        
+        if (!localStorage.getItem('processTjekliste')) {
+            setTimeout(() => {
+                showNotification('Tip: Dine ændringer gemmes automatisk i browseren. Brug "Gem projekt" for sikker backup.', 'info');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
