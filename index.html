@@ -954,8 +954,13 @@
                 // Title
                 sections.push(
                     new docx.Paragraph({
-                        text: 'Proces Tjekliste - Informationssøgning',
-                        heading: docx.HeadingLevel.TITLE,
+                        children: [
+                            new docx.TextRun({
+                                text: 'Proces Tjekliste - Informationssøgning',
+                                bold: true,
+                                size: 32
+                            })
+                        ],
                         spacing: { after: 400 }
                     })
                 );
@@ -964,9 +969,16 @@
                 if (metadata.projectName) {
                     sections.push(
                         new docx.Paragraph({
-                            text: 'Projektnavn: ' + metadata.projectName,
-                            spacing: { after: 200 },
-                            bold: true
+                            children: [
+                                new docx.TextRun({
+                                    text: 'Projektnavn: ',
+                                    bold: true
+                                }),
+                                new docx.TextRun({
+                                    text: metadata.projectName
+                                })
+                            ],
+                            spacing: { after: 200 }
                         })
                     );
                 }
@@ -974,7 +986,15 @@
                 if (metadata.projectDate) {
                     sections.push(
                         new docx.Paragraph({
-                            text: 'Dato: ' + metadata.projectDate,
+                            children: [
+                                new docx.TextRun({
+                                    text: 'Dato: ',
+                                    bold: true
+                                }),
+                                new docx.TextRun({
+                                    text: metadata.projectDate
+                                })
+                            ],
                             spacing: { after: 400 }
                         })
                     );
@@ -985,9 +1005,13 @@
                 const progressText = `Status: ${completedCount}/${totalSteps} trin gennemført (${Math.round((completedCount / totalSteps) * 100)}%)`;
                 sections.push(
                     new docx.Paragraph({
-                        text: progressText,
-                        spacing: { after: 600 },
-                        italics: true
+                        children: [
+                            new docx.TextRun({
+                                text: progressText,
+                                italics: true
+                            })
+                        ],
+                        spacing: { after: 600 }
                     })
                 );
 
@@ -1001,8 +1025,13 @@
                     // Step heading
                     sections.push(
                         new docx.Paragraph({
-                            text: `${i}. ${stepTitles[i - 1]}`,
-                            heading: docx.HeadingLevel.HEADING_1,
+                            children: [
+                                new docx.TextRun({
+                                    text: `${i}. ${stepTitles[i - 1]}`,
+                                    bold: true,
+                                    size: 28
+                                })
+                            ],
                             spacing: { before: 400, after: 200 }
                         })
                     );
@@ -1010,7 +1039,15 @@
                     // Status
                     sections.push(
                         new docx.Paragraph({
-                            text: 'Status: ' + status,
+                            children: [
+                                new docx.TextRun({
+                                    text: 'Status: ',
+                                    bold: true
+                                }),
+                                new docx.TextRun({
+                                    text: status
+                                })
+                            ],
                             spacing: { after: 100 }
                         })
                     );
@@ -1018,7 +1055,15 @@
                     // Responsible person
                     sections.push(
                         new docx.Paragraph({
-                            text: 'Ansvarlig: ' + responsible,
+                            children: [
+                                new docx.TextRun({
+                                    text: 'Ansvarlig: ',
+                                    bold: true
+                                }),
+                                new docx.TextRun({
+                                    text: responsible
+                                })
+                            ],
                             spacing: { after: 100 }
                         })
                     );
@@ -1026,15 +1071,23 @@
                     // Notes
                     sections.push(
                         new docx.Paragraph({
-                            text: 'Noter:',
-                            bold: true,
+                            children: [
+                                new docx.TextRun({
+                                    text: 'Noter:',
+                                    bold: true
+                                })
+                            ],
                             spacing: { after: 100 }
                         })
                     );
 
                     sections.push(
                         new docx.Paragraph({
-                            text: notes,
+                            children: [
+                                new docx.TextRun({
+                                    text: notes
+                                })
+                            ],
                             spacing: { after: 300 }
                         })
                     );
