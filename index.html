@@ -340,7 +340,7 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.1)</span></h1>
+            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.2)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
@@ -1155,36 +1155,6 @@
                         })
                     );
                 }
-
-                // Footer/signature line
-                sections.push(
-                    new docx.Paragraph({
-                        border: {
-                            top: {
-                                color: regionHBlue,
-                                space: 1,
-                                style: docx.BorderStyle.SINGLE,
-                                size: 10
-                            }
-                        },
-                        spacing: { before: 600, after: 200 }
-                    })
-                );
-
-                sections.push(
-                    new docx.Paragraph({
-                        children: [
-                            new docx.TextRun({
-                                text: 'Genereret via Proces Tjekliste - Region Hovedstaden',
-                                size: 18,
-                                font: 'Calibri',
-                                color: "666666",
-                                italics: true
-                            })
-                        ],
-                        alignment: docx.AlignmentType.CENTER
-                    })
-                );
 
                 // Create document
                 const doc = new docx.Document({
