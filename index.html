@@ -340,7 +340,7 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.0)</span></h1>
+            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.1)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
@@ -942,6 +942,9 @@
                     return;
                 }
 
+                // Region H blue color (RGB: 0, 94, 122 = #005E7A)
+                const regionHBlue = "005E7A";
+
                 // Step titles
                 const stepTitles = [
                     'Hvad leder du efter?',
@@ -957,16 +960,33 @@
                 // Create document sections
                 const sections = [];
 
-                // Title
+                // Title with Region H blue
                 sections.push(
                     new docx.Paragraph({
                         children: [
                             new docx.TextRun({
                                 text: 'Proces Tjekliste - Informationssøgning',
                                 bold: true,
-                                size: 32
+                                size: 32,
+                                color: regionHBlue,
+                                font: 'Calibri'
                             })
                         ],
+                        spacing: { after: 300 }
+                    })
+                );
+
+                // Horizontal line (using border)
+                sections.push(
+                    new docx.Paragraph({
+                        border: {
+                            bottom: {
+                                color: regionHBlue,
+                                space: 1,
+                                style: docx.BorderStyle.SINGLE,
+                                size: 20
+                            }
+                        },
                         spacing: { after: 400 }
                     })
                 );
@@ -978,13 +998,17 @@
                             children: [
                                 new docx.TextRun({
                                     text: 'Projektnavn: ',
-                                    bold: true
+                                    bold: true,
+                                    size: 22,
+                                    font: 'Calibri'
                                 }),
                                 new docx.TextRun({
-                                    text: metadata.projectName
+                                    text: metadata.projectName,
+                                    size: 22,
+                                    font: 'Calibri'
                                 })
                             ],
-                            spacing: { after: 200 }
+                            spacing: { after: 150 }
                         })
                     );
                 }
@@ -995,29 +1019,42 @@
                             children: [
                                 new docx.TextRun({
                                     text: 'Dato: ',
-                                    bold: true
+                                    bold: true,
+                                    size: 22,
+                                    font: 'Calibri'
                                 }),
                                 new docx.TextRun({
-                                    text: metadata.projectDate
+                                    text: metadata.projectDate,
+                                    size: 22,
+                                    font: 'Calibri'
                                 })
                             ],
-                            spacing: { after: 400 }
+                            spacing: { after: 150 }
                         })
                     );
                 }
 
-                // Progress summary
+                // Progress summary with background
                 const completedCount = completedSteps.size;
-                const progressText = `Status: ${completedCount}/${totalSteps} trin gennemført (${Math.round((completedCount / totalSteps) * 100)}%)`;
+                const percentage = Math.round((completedCount / totalSteps) * 100);
+                const progressText = `Status: ${completedCount}/${totalSteps} trin gennemført (${percentage}%)`;
+
                 sections.push(
                     new docx.Paragraph({
                         children: [
                             new docx.TextRun({
                                 text: progressText,
-                                italics: true
+                                italics: true,
+                                size: 22,
+                                font: 'Calibri',
+                                color: regionHBlue
                             })
                         ],
-                        spacing: { after: 600 }
+                        spacing: { after: 600 },
+                        shading: {
+                            fill: "E6F2F5" // Light blue background
+                        },
+                        indent: { left: 200 }
                     })
                 );
 
@@ -1028,33 +1065,40 @@
                     const responsible = stepData[i]?.responsible || 'Ikke angivet';
                     const notes = stepData[i]?.notes || 'Ingen noter';
 
-                    // Step heading
+                    // Step heading with blue color
                     sections.push(
                         new docx.Paragraph({
                             children: [
                                 new docx.TextRun({
                                     text: `${i}. ${stepTitles[i - 1]}`,
                                     bold: true,
-                                    size: 28
+                                    size: 28,
+                                    font: 'Calibri',
+                                    color: regionHBlue
                                 })
                             ],
                             spacing: { before: 400, after: 200 }
                         })
                     );
 
-                    // Status
+                    // Status with green checkmark or grey circle
                     sections.push(
                         new docx.Paragraph({
                             children: [
                                 new docx.TextRun({
                                     text: 'Status: ',
-                                    bold: true
+                                    bold: true,
+                                    size: 22,
+                                    font: 'Calibri'
                                 }),
                                 new docx.TextRun({
-                                    text: status
+                                    text: status,
+                                    size: 22,
+                                    font: 'Calibri',
+                                    color: isCompleted ? "10b981" : "666666"
                                 })
                             ],
-                            spacing: { after: 100 }
+                            spacing: { after: 150 }
                         })
                     );
 
@@ -1064,45 +1108,97 @@
                             children: [
                                 new docx.TextRun({
                                     text: 'Ansvarlig: ',
-                                    bold: true
+                                    bold: true,
+                                    size: 22,
+                                    font: 'Calibri'
                                 }),
                                 new docx.TextRun({
-                                    text: responsible
+                                    text: responsible,
+                                    size: 22,
+                                    font: 'Calibri'
                                 })
                             ],
-                            spacing: { after: 100 }
+                            spacing: { after: 150 }
                         })
                     );
 
-                    // Notes
+                    // Notes heading
                     sections.push(
                         new docx.Paragraph({
                             children: [
                                 new docx.TextRun({
                                     text: 'Noter:',
-                                    bold: true
+                                    bold: true,
+                                    size: 22,
+                                    font: 'Calibri'
                                 })
                             ],
                             spacing: { after: 100 }
                         })
                     );
 
+                    // Notes content with light background and indentation
                     sections.push(
                         new docx.Paragraph({
                             children: [
                                 new docx.TextRun({
-                                    text: notes
+                                    text: notes,
+                                    size: 22,
+                                    font: 'Calibri'
                                 })
                             ],
-                            spacing: { after: 300 }
+                            spacing: { after: 400 },
+                            shading: {
+                                fill: "F9FAFB" // Light grey background
+                            },
+                            indent: { left: 300, right: 300 }
                         })
                     );
                 }
 
+                // Footer/signature line
+                sections.push(
+                    new docx.Paragraph({
+                        border: {
+                            top: {
+                                color: regionHBlue,
+                                space: 1,
+                                style: docx.BorderStyle.SINGLE,
+                                size: 10
+                            }
+                        },
+                        spacing: { before: 600, after: 200 }
+                    })
+                );
+
+                sections.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: 'Genereret via Proces Tjekliste - Region Hovedstaden',
+                                size: 18,
+                                font: 'Calibri',
+                                color: "666666",
+                                italics: true
+                            })
+                        ],
+                        alignment: docx.AlignmentType.CENTER
+                    })
+                );
+
                 // Create document
                 const doc = new docx.Document({
                     sections: [{
-                        properties: {},
+                        properties: {
+                            page: {
+                                margin: {
+                                    top: 1440,  // 1 inch = 1440 twips
+                                    right: 1440,
+                                    bottom: 1440,
+                                    left: 1440
+                                }
+                            }
+                        },
                         children: sections
                     }]
                 });
