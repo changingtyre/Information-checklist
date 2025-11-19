@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proces Tjekliste - Informationssøgning</title>
-    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
@@ -936,6 +936,12 @@
         // Export to Word document
         async function exportToWord() {
             try {
+                // Check if docx library is loaded
+                if (typeof docx === 'undefined') {
+                    showNotification('Docx bibliotek ikke indlæst. Tjek internet forbindelse.', 'error');
+                    return;
+                }
+
                 // Step titles
                 const stepTitles = [
                     'Hvad leder du efter?',
@@ -1112,7 +1118,8 @@
 
             } catch (error) {
                 console.error('Export error:', error);
-                showNotification('Fejl ved eksport til Word. Prøv igen.', 'error');
+                console.error('Error details:', error.message, error.stack);
+                showNotification('Fejl ved eksport: ' + error.message, 'error');
             }
         }
 
