@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proces Tjekliste - Informationssøgning</title>
+    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -120,9 +122,18 @@
             background: #3b82f6;
             color: white;
         }
-        
+
         .btn-load:hover {
             background: #2563eb;
+        }
+
+        .btn-word {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-word:hover {
+            background: #1d4ed8;
         }
         
         .file-input {
@@ -330,7 +341,21 @@
     <div class="container">
         <div class="progress-section">
             <h1>Proces Tjekliste - Informationssøgning</h1>
-            
+
+            <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+                <div class="input-group">
+                    <label class="input-label" for="project-name">Projektnavn:</label>
+                    <input type="text" id="project-name" class="input-field"
+                           placeholder="Indtast navn på vidensprodukt..."
+                           onchange="saveMetadata('projectName', this.value)">
+                </div>
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label class="input-label" for="project-date">Dato:</label>
+                    <input type="date" id="project-date" class="input-field small"
+                           onchange="saveMetadata('projectDate', this.value)">
+                </div>
+            </div>
+
             <div class="progress-header">
                 <span>Fremgang</span>
                 <span id="progress-text">0/8 trin</span>
@@ -369,6 +394,16 @@
                         <polyline points="10,9 9,9 8,9"></polyline>
                     </svg>
                     Indlæs projekt
+                </button>
+
+                <button class="btn btn-word" onclick="exportToWord()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14,2 14,8 20,8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                    Eksportér til Word
                 </button>
             </div>
             
@@ -638,6 +673,10 @@
     <script>
         let completedSteps = new Set();
         let stepData = {};
+        let metadata = {
+            projectName: '',
+            projectDate: ''
+        };
         const totalSteps = 8;
 
         // Initialize data storage
@@ -648,6 +687,16 @@
                     notes: ''
                 };
             }
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            metadata.projectDate = today;
+            document.getElementById('project-date').value = today;
+        }
+
+        // Save metadata
+        function saveMetadata(field, value) {
+            metadata[field] = value;
+            saveToLocalStorage();
         }
 
         // Save data for a step
@@ -664,6 +713,7 @@
             const projectData = {
                 completedSteps: Array.from(completedSteps),
                 stepData: stepData,
+                metadata: metadata,
                 savedAt: new Date().toISOString()
             };
             try {
@@ -681,6 +731,7 @@
                     const projectData = JSON.parse(savedData);
                     completedSteps = new Set(projectData.completedSteps || []);
                     stepData = projectData.stepData || {};
+                    metadata = projectData.metadata || { projectName: '', projectDate: '' };
                     restoreUIState();
                     return true;
                 }
@@ -776,6 +827,7 @@
             const projectData = {
                 completedSteps: Array.from(completedSteps),
                 stepData: stepData,
+                metadata: metadata,
                 savedAt: new Date().toISOString(),
                 version: '1.0'
             };
@@ -801,22 +853,23 @@
         function loadProject(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const projectData = JSON.parse(e.target.result);
-                    
+
                     if (!projectData.completedSteps || !projectData.stepData) {
                         throw new Error('Invalid file format');
                     }
-                    
+
                     completedSteps = new Set(projectData.completedSteps);
                     stepData = projectData.stepData;
-                    
+                    metadata = projectData.metadata || { projectName: '', projectDate: '' };
+
                     restoreUIState();
                     saveToLocalStorage();
-                    
+
                     showNotification('Projekt indlæst succesfuldt!', 'success');
                     
                 } catch (error) {
@@ -829,10 +882,14 @@
 
         // Restore UI state
         function restoreUIState() {
+            // Restore metadata fields
+            document.getElementById('project-name').value = metadata.projectName || '';
+            document.getElementById('project-date').value = metadata.projectDate || '';
+
             for (let i = 1; i <= totalSteps; i++) {
                 const stepElement = document.querySelector(`.step:nth-child(${i})`);
                 const iconElement = document.getElementById(`icon-${i}`);
-                
+
                 if (completedSteps.has(i)) {
                     stepElement.classList.add('completed');
                     iconElement.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path>';
@@ -842,10 +899,10 @@
                     iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
                     iconElement.setAttribute('stroke', '#9ca3af');
                 }
-                
+
                 const responsibleField = document.getElementById(`responsible-${i}`);
                 const notesField = document.getElementById(`notes-${i}`);
-                
+
                 if (responsibleField && stepData[i]) {
                     responsibleField.value = stepData[i].responsible || '';
                 }
@@ -853,7 +910,7 @@
                     notesField.value = stepData[i].notes || '';
                 }
             }
-            
+
             updateProgress();
         }
 
@@ -876,13 +933,143 @@
             }, 3000);
         }
 
+        // Export to Word document
+        async function exportToWord() {
+            try {
+                // Step titles
+                const stepTitles = [
+                    'Hvad leder du efter?',
+                    'Afdelingens viden',
+                    'Find hjemmesider og rapporter',
+                    'Find forskning',
+                    'Involvér fagperson(er)',
+                    'Kilder og referencer',
+                    'Vurdér informationen',
+                    'Formidling'
+                ];
+
+                // Create document sections
+                const sections = [];
+
+                // Title
+                sections.push(
+                    new docx.Paragraph({
+                        text: 'Proces Tjekliste - Informationssøgning',
+                        heading: docx.HeadingLevel.TITLE,
+                        spacing: { after: 400 }
+                    })
+                );
+
+                // Metadata section
+                if (metadata.projectName) {
+                    sections.push(
+                        new docx.Paragraph({
+                            text: 'Projektnavn: ' + metadata.projectName,
+                            spacing: { after: 200 },
+                            bold: true
+                        })
+                    );
+                }
+
+                if (metadata.projectDate) {
+                    sections.push(
+                        new docx.Paragraph({
+                            text: 'Dato: ' + metadata.projectDate,
+                            spacing: { after: 400 }
+                        })
+                    );
+                }
+
+                // Progress summary
+                const completedCount = completedSteps.size;
+                const progressText = `Status: ${completedCount}/${totalSteps} trin gennemført (${Math.round((completedCount / totalSteps) * 100)}%)`;
+                sections.push(
+                    new docx.Paragraph({
+                        text: progressText,
+                        spacing: { after: 600 },
+                        italics: true
+                    })
+                );
+
+                // Add each step
+                for (let i = 1; i <= totalSteps; i++) {
+                    const isCompleted = completedSteps.has(i);
+                    const status = isCompleted ? '✓ Gennemført' : '○ Ikke gennemført';
+                    const responsible = stepData[i]?.responsible || 'Ikke angivet';
+                    const notes = stepData[i]?.notes || 'Ingen noter';
+
+                    // Step heading
+                    sections.push(
+                        new docx.Paragraph({
+                            text: `${i}. ${stepTitles[i - 1]}`,
+                            heading: docx.HeadingLevel.HEADING_1,
+                            spacing: { before: 400, after: 200 }
+                        })
+                    );
+
+                    // Status
+                    sections.push(
+                        new docx.Paragraph({
+                            text: 'Status: ' + status,
+                            spacing: { after: 100 }
+                        })
+                    );
+
+                    // Responsible person
+                    sections.push(
+                        new docx.Paragraph({
+                            text: 'Ansvarlig: ' + responsible,
+                            spacing: { after: 100 }
+                        })
+                    );
+
+                    // Notes
+                    sections.push(
+                        new docx.Paragraph({
+                            text: 'Noter:',
+                            bold: true,
+                            spacing: { after: 100 }
+                        })
+                    );
+
+                    sections.push(
+                        new docx.Paragraph({
+                            text: notes,
+                            spacing: { after: 300 }
+                        })
+                    );
+                }
+
+                // Create document
+                const doc = new docx.Document({
+                    sections: [{
+                        properties: {},
+                        children: sections
+                    }]
+                });
+
+                // Generate and download
+                const blob = await docx.Packer.toBlob(doc);
+                const fileName = metadata.projectName
+                    ? `${metadata.projectName.replace(/[^a-z0-9]/gi, '_')}_${metadata.projectDate || 'rapport'}.docx`
+                    : `proces-tjekliste_${metadata.projectDate || new Date().toISOString().split('T')[0]}.docx`;
+
+                saveAs(blob, fileName);
+                showNotification('Word-dokument eksporteret succesfuldt!', 'success');
+
+            } catch (error) {
+                console.error('Export error:', error);
+                showNotification('Fejl ved eksport til Word. Prøv igen.', 'error');
+            }
+        }
+
         // Initialize
         initializeData();
-        
+
         if (!loadFromLocalStorage()) {
             updateProgress();
         }
-        
+
         if (!localStorage.getItem('processTjekliste')) {
             setTimeout(() => {
                 showNotification('Tip: Dine ændringer gemmes automatisk i browseren. Brug "Gem projekt" for sikker backup.', 'info');
