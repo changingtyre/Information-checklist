@@ -135,7 +135,16 @@
         .btn-word:hover {
             background: #1d4ed8;
         }
-        
+
+        .btn-new {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-new:hover {
+            background: #059669;
+        }
+
         .file-input {
             display: none;
         }
@@ -340,7 +349,7 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.2)</span></h1>
+            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.3)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
@@ -368,6 +377,16 @@
             <div id="progress-percentage" class="progress-percentage">0% færdig</div>
             
             <div class="action-buttons">
+                <button class="btn btn-new" onclick="newProject()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14,2 14,8 20,8"></polyline>
+                        <line x1="12" y1="11" x2="12" y2="17"></line>
+                        <line x1="9" y1="14" x2="15" y2="14"></line>
+                    </svg>
+                    Nyt projekt
+                </button>
+
                 <button class="btn btn-reset" onclick="resetAll()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
@@ -375,7 +394,7 @@
                     </svg>
                     Nulstil alle
                 </button>
-                
+
                 <button class="btn btn-save" onclick="saveProject()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
@@ -801,25 +820,91 @@
             if (confirm('Er du sikker på at du vil nulstille alle data? Dette kan ikke fortrydes.')) {
                 completedSteps.clear();
                 initializeData();
-                
+
                 for (let i = 1; i <= totalSteps; i++) {
                     const stepElement = document.querySelector(`.step:nth-child(${i})`);
                     const iconElement = document.getElementById(`icon-${i}`);
-                    
+
                     stepElement.classList.remove('completed');
                     iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
                     iconElement.setAttribute('stroke', '#9ca3af');
-                    
+
                     const responsibleField = document.getElementById(`responsible-${i}`);
                     const notesField = document.getElementById(`notes-${i}`);
                     if (responsibleField) responsibleField.value = '';
                     if (notesField) notesField.value = '';
                 }
-                
+
                 updateProgress();
                 saveToLocalStorage();
                 showNotification('Alle data er nulstillet.', 'info');
             }
+        }
+
+        // Start new project
+        function newProject() {
+            // Check if there is any data
+            const hasData = completedSteps.size > 0 ||
+                           metadata.projectName !== '' ||
+                           Object.values(stepData).some(step => step.responsible !== '' || step.notes !== '');
+
+            if (hasData) {
+                const userChoice = confirm('Du har et igangværende projekt.\n\nVil du gemme det nuværende projekt først?\n\nOK = Gem og start nyt projekt\nAnnuller = Start nyt projekt uden at gemme');
+
+                if (userChoice) {
+                    // User wants to save first
+                    saveProject();
+                    // Give a moment for the download to start
+                    setTimeout(() => {
+                        clearAndStartNew();
+                    }, 500);
+                } else {
+                    // User doesn't want to save
+                    if (confirm('Er du sikker? Alt i det nuværende projekt vil gå tabt.')) {
+                        clearAndStartNew();
+                    }
+                }
+            } else {
+                // No data, just start fresh
+                clearAndStartNew();
+            }
+        }
+
+        // Clear all data and start fresh
+        function clearAndStartNew() {
+            completedSteps.clear();
+
+            // Reset metadata
+            metadata = {
+                projectName: '',
+                projectDate: new Date().toISOString().split('T')[0]
+            };
+
+            // Clear project name field
+            document.getElementById('project-name').value = '';
+            document.getElementById('project-date').value = metadata.projectDate;
+
+            // Initialize fresh step data
+            initializeData();
+
+            // Reset all step UI elements
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepElement = document.querySelector(`.step:nth-child(${i})`);
+                const iconElement = document.getElementById(`icon-${i}`);
+
+                stepElement.classList.remove('completed');
+                iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+                iconElement.setAttribute('stroke', '#9ca3af');
+
+                const responsibleField = document.getElementById(`responsible-${i}`);
+                const notesField = document.getElementById(`notes-${i}`);
+                if (responsibleField) responsibleField.value = '';
+                if (notesField) notesField.value = '';
+            }
+
+            updateProgress();
+            saveToLocalStorage();
+            showNotification('Nyt projekt startet!', 'success');
         }
 
         // Save project to file
