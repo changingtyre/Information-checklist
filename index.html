@@ -349,7 +349,7 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v4.1)</span></h1>
+            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v4.2)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
@@ -700,7 +700,17 @@
                 </div>
             </div>
         </div>
-        
+
+        <div style="margin-top: 30px; padding: 25px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+            <div class="input-group">
+                <label class="input-label" for="andre-overvejelser" style="font-size: 1.1rem; color: #333;">Andre overvejelser</label>
+                <textarea id="andre-overvejelser" class="input-field textarea-field"
+                          style="min-height: 100px;"
+                          placeholder="Skriv eventuelle andre overvejelser her..."
+                          onchange="saveMetadata('andreOvervejelser', this.value)"></textarea>
+            </div>
+        </div>
+
         <div class="tip-box">
             <strong>Tip:</strong> Klik på hvert trin for at markere det som færdigt.
             Dine ændringer gemmes automatisk i browseren. Brug "Gem projekt" for at downloade en sikkerhedskopi
@@ -726,7 +736,8 @@
         let stepData = {};
         let metadata = {
             projectName: '',
-            projectDate: ''
+            projectDate: '',
+            andreOvervejelser: ''
         };
         const totalSteps = 8;
 
@@ -925,12 +936,14 @@
             // Reset metadata
             metadata = {
                 projectName: '',
-                projectDate: new Date().toISOString().split('T')[0]
+                projectDate: new Date().toISOString().split('T')[0],
+                andreOvervejelser: ''
             };
 
             // Clear project name field
             document.getElementById('project-name').value = '';
             document.getElementById('project-date').value = metadata.projectDate;
+            document.getElementById('andre-overvejelser').value = '';
 
             // Initialize fresh step data
             initializeData();
@@ -1020,6 +1033,7 @@
             // Restore metadata fields
             document.getElementById('project-name').value = metadata.projectName || '';
             document.getElementById('project-date').value = metadata.projectDate || '';
+            document.getElementById('andre-overvejelser').value = metadata.andreOvervejelser || '';
 
             for (let i = 1; i <= totalSteps; i++) {
                 const stepElement = document.querySelector(`.step:nth-child(${i})`);
@@ -1368,6 +1382,35 @@
                         new docx.Paragraph({
                             text: '',
                             spacing: { after: 200 }
+                        })
+                    );
+                }
+
+                // Add "Andre overvejelser" section if it has content
+                if (metadata.andreOvervejelser && metadata.andreOvervejelser.trim() !== '') {
+                    sections.push(
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({
+                                    text: 'Andre overvejelser',
+                                    bold: true,
+                                    size: 28,
+                                    font: 'Calibri',
+                                    color: regionHBlue
+                                })
+                            ],
+                            spacing: { before: 400, after: 200 }
+                        })
+                    );
+
+                    sections.push(
+                        new docx.Paragraph({
+                            children: textToRunsWithLinks(metadata.andreOvervejelser, 22, 'Calibri'),
+                            spacing: { after: 400 },
+                            shading: {
+                                fill: "F9FAFB" // Light grey background
+                            },
+                            indent: { left: 300, right: 300 }
                         })
                     );
                 }
