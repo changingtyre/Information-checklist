@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proces Tjekliste - Informationssøgning</title>
+    <title>Steno Videncenter - Afdækning af information</title>
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
@@ -349,13 +349,13 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Proces Tjekliste - Informationssøgning <span style="font-size: 0.5em; color: #999;">(v2.3)</span></h1>
+            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v3.0)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
-                    <label class="input-label" for="project-name">Projektnavn:</label>
+                    <label class="input-label" for="project-name">Produktnavn:</label>
                     <input type="text" id="project-name" class="input-field"
-                           placeholder="Indtast navn på vidensprodukt..."
+                           placeholder="Indtast navn på produktet..."
                            onchange="saveMetadata('projectName', this.value)">
                 </div>
                 <div class="input-group" style="margin-bottom: 0;">
@@ -448,10 +448,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">1. Hvad leder du efter?</h3>
-                        <p class="step-description">Ved du præcis, hvad du vil søge efter? Hvis ikke, så start her.</p>
-                        <a href="https://regionh.sharepoint.com/sites/82406c91-4a16-4a96-9127-943545e93f7b/SitePages/V%C3%A6lg-emne.aspx" 
-                           target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">1. Hvilket emne arbejder vi med</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -479,9 +477,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">2. Afdelingens viden</h3>
-                        <p class="step-description">Har du styr på den viden vi allerede har i afdelingen?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">2. Viden i afdelingen</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -509,9 +506,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">3. Find hjemmesider og rapporter</h3>
-                        <p class="step-description">Har du fundet information på relevante hjemmesider?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">3. Information på hjemmesider og rapporter</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -539,9 +535,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">4. Find forskning</h3>
-                        <p class="step-description">Har du søgt efter forskning på området?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">4. Skal vi søge efter forskning?</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -569,9 +564,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">5. Involvér fagperson(er)</h3>
-                        <p class="step-description">Har du behov for at involvere en fagperson?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">5. Mangler vi kompetencer?</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -599,9 +593,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">6. Kilder og referencer</h3>
-                        <p class="step-description">Er det svært at få styr på, hvor din viden kommer fra?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">6. Hvor gemmer vi kilder og referencer?</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -629,9 +622,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">7. Vurdér informationen</h3>
-                        <p class="step-description">Er du i tvivl, om informationen er til at stole på?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">7. Har vi information nok?</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -659,9 +651,8 @@
                         </svg>
                     </div>
                     <div class="step-text">
-                        <h3 class="step-title">8. Formidling</h3>
-                        <p class="step-description">Er du klar til at sende budskabet videre?</p>
-                        <a href="#" target="_blank" class="step-link" onclick="event.stopPropagation()">Få hjælp her</a>
+                        <h3 class="step-title">8. Opsummering og fortolkning</h3>
+                        <p class="step-description"></p>
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
@@ -1018,6 +1009,57 @@
             }, 3000);
         }
 
+        // Convert text with URLs to TextRun array with hyperlinks
+        function textToRunsWithLinks(text, size = 22, font = 'Calibri') {
+            if (!text || text === 'Ingen noter') {
+                return [new docx.TextRun({ text: text, size: size, font: font })];
+            }
+
+            // Regular expression to find URLs
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const parts = [];
+            let lastIndex = 0;
+            let match;
+
+            while ((match = urlRegex.exec(text)) !== null) {
+                // Add text before URL
+                if (match.index > lastIndex) {
+                    parts.push(new docx.TextRun({
+                        text: text.substring(lastIndex, match.index),
+                        size: size,
+                        font: font
+                    }));
+                }
+
+                // Add URL as hyperlink
+                parts.push(new docx.ExternalHyperlink({
+                    children: [
+                        new docx.TextRun({
+                            text: match[0],
+                            size: size,
+                            font: font,
+                            color: "0563C1",
+                            underline: {}
+                        })
+                    ],
+                    link: match[0]
+                }));
+
+                lastIndex = match.index + match[0].length;
+            }
+
+            // Add remaining text after last URL
+            if (lastIndex < text.length) {
+                parts.push(new docx.TextRun({
+                    text: text.substring(lastIndex),
+                    size: size,
+                    font: font
+                }));
+            }
+
+            return parts.length > 0 ? parts : [new docx.TextRun({ text: text, size: size, font: font })];
+        }
+
         // Export to Word document
         async function exportToWord() {
             try {
@@ -1032,14 +1074,14 @@
 
                 // Step titles
                 const stepTitles = [
-                    'Hvad leder du efter?',
-                    'Afdelingens viden',
-                    'Find hjemmesider og rapporter',
-                    'Find forskning',
-                    'Involvér fagperson(er)',
-                    'Kilder og referencer',
-                    'Vurdér informationen',
-                    'Formidling'
+                    'Hvilket emne arbejder vi med',
+                    'Viden i afdelingen',
+                    'Information på hjemmesider og rapporter',
+                    'Skal vi søge efter forskning?',
+                    'Mangler vi kompetencer?',
+                    'Hvor gemmer vi kilder og referencer?',
+                    'Har vi information nok?',
+                    'Opsummering og fortolkning'
                 ];
 
                 // Create document sections
@@ -1050,7 +1092,7 @@
                     new docx.Paragraph({
                         children: [
                             new docx.TextRun({
-                                text: 'Proces Tjekliste - Informationssøgning',
+                                text: 'Steno Videncenter - Afdækning af information',
                                 bold: true,
                                 size: 32,
                                 color: regionHBlue,
@@ -1082,7 +1124,7 @@
                         new docx.Paragraph({
                             children: [
                                 new docx.TextRun({
-                                    text: 'Projektnavn: ',
+                                    text: 'Produktnavn: ',
                                     bold: true,
                                     size: 22,
                                     font: 'Calibri'
@@ -1222,16 +1264,10 @@
                         })
                     );
 
-                    // Notes content with light background and indentation
+                    // Notes content with light background and indentation (with clickable links)
                     sections.push(
                         new docx.Paragraph({
-                            children: [
-                                new docx.TextRun({
-                                    text: notes,
-                                    size: 22,
-                                    font: 'Calibri'
-                                })
-                            ],
+                            children: textToRunsWithLinks(notes, 22, 'Calibri'),
                             spacing: { after: 400 },
                             shading: {
                                 fill: "F9FAFB" // Light grey background
