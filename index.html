@@ -7,32 +7,73 @@
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
+        :root {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: white;
+            --bg-tertiary: #f9fafb;
+            --border-color: #e5e7eb;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --step-hover-border: #3b82f6;
+            --completed-bg: #ecfdf5;
+            --completed-border: #a7f3d0;
+            --completed-text: #065f46;
+            --completed-text-light: #047857;
+            --input-border: #d1d5db;
+            --tip-bg: #eff6ff;
+            --tip-border: #bfdbfe;
+            --tip-text: #1e40af;
+        }
+
+        body.dark-mode {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #242424;
+            --border-color: #404040;
+            --text-primary: #e5e5e5;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #808080;
+            --step-hover-border: #4a9eff;
+            --completed-bg: #1a3a2d;
+            --completed-border: #2d5a45;
+            --completed-text: #7dd3a7;
+            --completed-text-light: #5cb886;
+            --input-border: #505050;
+            --tip-bg: #1e2b3a;
+            --tip-border: #2d4560;
+            --tip-text: #6b9bd8;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f5f5f5;
+            background-color: var(--bg-primary);
             padding: 20px;
             line-height: 1.6;
+            transition: background-color 0.3s ease;
         }
         
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
         }
-        
+
         h1 {
-            color: #333;
+            color: var(--text-primary);
             margin-bottom: 20px;
             font-size: 2rem;
+            transition: color 0.3s ease;
         }
         
         .progress-section {
@@ -175,23 +216,23 @@
         }
         
         .step {
-            background: white;
-            border: 1px solid #e5e7eb;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 15px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .step:hover {
-            border-color: #3b82f6;
+            border-color: var(--step-hover-border);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
+
         .step.completed {
-            background: #ecfdf5;
-            border-color: #a7f3d0;
+            background: var(--completed-bg);
+            border-color: var(--completed-border);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
         
@@ -219,20 +260,22 @@
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #333;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
         }
-        
+
         .step.completed .step-title {
-            color: #065f46;
+            color: var(--completed-text);
         }
-        
+
         .step-description {
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 8px;
+            transition: color 0.3s ease;
         }
-        
+
         .step.completed .step-description {
-            color: #047857;
+            color: var(--completed-text-light);
         }
         
         .step-link {
@@ -260,35 +303,39 @@
         .input-fields {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
         }
-        
+
         .input-group {
             margin-bottom: 15px;
         }
-        
+
         .input-group:last-child {
             margin-bottom: 0;
         }
-        
+
         .input-label {
             display: block;
             font-weight: 600;
-            color: #374151;
+            color: var(--text-primary);
             margin-bottom: 5px;
             font-size: 0.9rem;
+            transition: color 0.3s ease;
         }
-        
+
         .input-field {
             width: 100%;
             padding: 8px 10px;
-            border: 1px solid #d1d5db;
+            border: 1px solid var(--input-border);
             border-radius: 6px;
             font-size: 0.9rem;
             font-family: inherit;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
         }
-        
+
         .input-field:focus {
             outline: none;
             border-color: #3b82f6;
@@ -305,13 +352,44 @@
         }
         
         .tip-box {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
+            background: var(--tip-bg);
+            border: 1px solid var(--tip-border);
             padding: 15px;
             border-radius: 8px;
             margin-top: 30px;
-            color: #1e40af;
+            color: var(--tip-text);
             font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
         }
         
         .notification {
@@ -347,11 +425,28 @@
     </style>
 </head>
 <body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+        <svg id="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="theme-icon-moon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
     <div class="container">
         <div class="progress-section">
-            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v4.2)</span></h1>
+            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: var(--text-tertiary);">(v4.3)</span></h1>
 
-            <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+            <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: var(--bg-tertiary); border-radius: 8px; border: 1px solid var(--border-color);">
                 <div class="input-group">
                     <label class="input-label" for="project-name">Produktnavn:</label>
                     <input type="text" id="project-name" class="input-field"
@@ -494,13 +589,13 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-2">Har nogen i afdelingen viden om emnet, eller er der et lignende vidensprodukt, vi kan hente inspiration og viden fra?</label>
                                 <textarea id="field1-2" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(2, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-2">Evt. Hvem undersøger det:</label>
                                 <input type="text" id="field2-2" class="input-field small"
-                                       placeholder="Hvem er ansvarlig?"
+                                       placeholder="..."
                                        onchange="saveData(2, 'field2', this.value)">
                             </div>
                         </div>
@@ -523,13 +618,13 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-3">Hvilke hjemmesider skal vi tjekke?</label>
                                 <textarea id="field1-3" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(3, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-3">Evt. Hvem undersøger det:</label>
                                 <input type="text" id="field2-3" class="input-field small"
-                                       placeholder="Hvem er ansvarlig?"
+                                       placeholder="..."
                                        onchange="saveData(3, 'field2', this.value)">
                             </div>
                         </div>
@@ -552,13 +647,13 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-4">Mangler vi information, som vi bliver nødt til at finde forskning om? Hvad mangler vi?</label>
                                 <textarea id="field1-4" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(4, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-4">Hvis ja, hvem gør det?</label>
                                 <input type="text" id="field2-4" class="input-field small"
-                                       placeholder="Hvem er ansvarlig?"
+                                       placeholder="..."
                                        onchange="saveData(4, 'field2', this.value)">
                             </div>
                         </div>
@@ -581,13 +676,13 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-5">Vi bruger fagpersoner til mange ting, f.eks. til at præcisere emnet, hjælpe med teknikken, til at afklare tvivlsspørgsmål i vidensafdækningen og til at validere indholdet. Skal vi bruge kompetencer, som ikke er en del af arbejdsgruppen? Hvem?</label>
                                 <textarea id="field1-5" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(5, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-5">Hvis ja, hvem tager kontakt?</label>
                                 <input type="text" id="field2-5" class="input-field small"
-                                       placeholder="Hvem er ansvarlig?"
+                                       placeholder="..."
                                        onchange="saveData(5, 'field2', this.value)">
                             </div>
                         </div>
@@ -610,19 +705,19 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-6">Har vi allerede nu kilder, der er relevante for dette produkt? Hvilke?</label>
                                 <textarea id="field1-6" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(6, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-6">Hvor gemmer vi kilder og referencer?</label>
                                 <textarea id="field2-6" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(6, 'field2', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field3-6">Hvem har det primære overblik?</label>
                                 <input type="text" id="field3-6" class="input-field small"
-                                       placeholder="Hvem er ansvarlig?"
+                                       placeholder="..."
                                        onchange="saveData(6, 'field3', this.value)">
                             </div>
                         </div>
@@ -645,19 +740,19 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-7">Har vi information nok og er den af høj nok kvalitet? Kommer den fra personer eller organisationer, vi stoler på?</label>
                                 <textarea id="field1-7" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(7, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-7">Er der noget, vi skal undersøge?</label>
                                 <textarea id="field2-7" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(7, 'field2', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field3-7">Hvis ja, hvem gør det?</label>
                                 <input type="text" id="field3-7" class="input-field small"
-                                       placeholder="Hvem er ansvarlig?"
+                                       placeholder="..."
                                        onchange="saveData(7, 'field3', this.value)">
                             </div>
                         </div>
@@ -680,19 +775,19 @@
                             <div class="input-group">
                                 <label class="input-label" for="field1-8">Hvad er de vigtigste budskaber?</label>
                                 <textarea id="field1-8" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(8, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-8">Er der noget, vi skal være særligt opmærksomme på i formidlingen?</label>
                                 <textarea id="field2-8" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(8, 'field2', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field3-8">Med hvor stor sikkerhed kan vi formidle vores budskab? Tænk over styrkemarkører.</label>
                                 <textarea id="field3-8" class="input-field textarea-field"
-                                          placeholder="Skriv dine svar her..."
+                                          placeholder="Skriv overvejelser her..."
                                           onchange="saveData(8, 'field3', this.value)"></textarea>
                             </div>
                         </div>
@@ -701,12 +796,12 @@
             </div>
         </div>
 
-        <div style="margin-top: 30px; padding: 25px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+        <div style="margin-top: 30px; padding: 25px; background: var(--bg-tertiary); border-radius: 8px; border: 1px solid var(--border-color);">
             <div class="input-group">
-                <label class="input-label" for="andre-overvejelser" style="font-size: 1.1rem; color: #333;">Andre overvejelser</label>
+                <label class="input-label" for="andre-overvejelser" style="font-size: 1.1rem; color: var(--text-primary);">Andre overvejelser</label>
                 <textarea id="andre-overvejelser" class="input-field textarea-field"
                           style="min-height: 100px;"
-                          placeholder="Skriv eventuelle andre overvejelser her..."
+                          placeholder="Skriv overvejelser her..."
                           onchange="saveMetadata('andreOvervejelser', this.value)"></textarea>
             </div>
         </div>
@@ -717,8 +812,8 @@
             eller "Indlæs projekt" for at genindlæse gemte data.
         </div>
 
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
-            <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border-color);">
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">
                 <strong>⚠️ Advarsel:</strong> Denne handling sletter alle data permanent.
             </p>
             <button class="btn btn-reset" onclick="resetAll()">
@@ -740,6 +835,40 @@
             andreOvervejelser: ''
         };
         const totalSteps = 8;
+
+        // Dark mode functionality
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+
+            // Toggle icon visibility
+            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcon = document.getElementById('theme-icon-moon');
+
+            if (isDarkMode) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+
+            // Save preference
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Load dark mode preference
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'true') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon-sun').style.display = 'none';
+                document.getElementById('theme-icon-moon').style.display = 'block';
+            }
+        }
+
+        // Load dark mode on page load
+        loadDarkModePreference();
 
         // Initialize data storage
         function initializeData() {
