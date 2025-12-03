@@ -349,7 +349,7 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v4.0)</span></h1>
+            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v4.1)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
@@ -385,14 +385,6 @@
                         <line x1="9" y1="14" x2="15" y2="14"></line>
                     </svg>
                     Nyt projekt
-                </button>
-
-                <button class="btn btn-reset" onclick="resetAll()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
-                        <path d="M21 3v5h-5"></path>
-                    </svg>
-                    Nulstil alle
                 </button>
 
                 <button class="btn btn-save" onclick="saveProject()">
@@ -454,27 +446,33 @@
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
                                 <label class="input-label" for="field1-1">P - Population:</label>
-                                <input type="text" id="field1-1" class="input-field"
-                                       placeholder="Beskriv populationen..."
-                                       onchange="saveData(1, 'field1', this.value)">
+                                <textarea id="field1-1" class="input-field textarea-field"
+                                          placeholder="Beskriv populationen..."
+                                          onchange="saveData(1, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field2-1">I - Intervention/interesse:</label>
-                                <input type="text" id="field2-1" class="input-field"
-                                       placeholder="Beskriv interventionen/interessen..."
-                                       onchange="saveData(1, 'field2', this.value)">
+                                <textarea id="field2-1" class="input-field textarea-field"
+                                          placeholder="Beskriv interventionen/interessen..."
+                                          onchange="saveData(1, 'field2', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field3-1">C - Sammenligning/context:</label>
-                                <input type="text" id="field3-1" class="input-field"
-                                       placeholder="Beskriv sammenligningen/konteksten..."
-                                       onchange="saveData(1, 'field3', this.value)">
+                                <textarea id="field3-1" class="input-field textarea-field"
+                                          placeholder="Beskriv sammenligningen/konteksten..."
+                                          onchange="saveData(1, 'field3', this.value)"></textarea>
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="field4-1">O - Resultat:</label>
-                                <input type="text" id="field4-1" class="input-field"
-                                       placeholder="Beskriv resultatet..."
-                                       onchange="saveData(1, 'field4', this.value)">
+                                <textarea id="field4-1" class="input-field textarea-field"
+                                          placeholder="Beskriv resultatet..."
+                                          onchange="saveData(1, 'field4', this.value)"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="field5-1">Andre overvejelser:</label>
+                                <textarea id="field5-1" class="input-field textarea-field"
+                                          placeholder="Skriv dine overvejelser her..."
+                                          onchange="saveData(1, 'field5', this.value)"></textarea>
                             </div>
                         </div>
                     </div>
@@ -704,9 +702,22 @@
         </div>
         
         <div class="tip-box">
-            <strong>Tip:</strong> Klik på hvert trin for at markere det som færdigt. 
-            Dine ændringer gemmes automatisk i browseren. Brug "Gem projekt" for at downloade en sikkerhedskopi 
+            <strong>Tip:</strong> Klik på hvert trin for at markere det som færdigt.
+            Dine ændringer gemmes automatisk i browseren. Brug "Gem projekt" for at downloade en sikkerhedskopi
             eller "Indlæs projekt" for at genindlæse gemte data.
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
+                <strong>⚠️ Advarsel:</strong> Denne handling sletter alle data permanent.
+            </p>
+            <button class="btn btn-reset" onclick="resetAll()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                    <path d="M21 3v5h-5"></path>
+                </svg>
+                Nulstil alle
+            </button>
         </div>
     </div>
 
@@ -721,8 +732,8 @@
 
         // Initialize data storage
         function initializeData() {
-            // Step 1 has 4 fields (PICO)
-            stepData[1] = { field1: '', field2: '', field3: '', field4: '' };
+            // Step 1 has 5 fields (PICO + Andre overvejelser)
+            stepData[1] = { field1: '', field2: '', field3: '', field4: '', field5: '' };
 
             // Steps 2-5 have 2 fields each
             for (let i = 2; i <= 5; i++) {
@@ -751,7 +762,7 @@
             if (!stepData[stepNum]) {
                 // Initialize with correct structure based on step
                 if (stepNum === 1) {
-                    stepData[stepNum] = { field1: '', field2: '', field3: '', field4: '' };
+                    stepData[stepNum] = { field1: '', field2: '', field3: '', field4: '', field5: '' };
                 } else if (stepNum >= 2 && stepNum <= 5) {
                     stepData[stepNum] = { field1: '', field2: '' };
                 } else {
@@ -865,7 +876,7 @@
                     iconElement.setAttribute('stroke', '#9ca3af');
 
                     // Clear fields based on step structure
-                    const maxFields = (i === 1) ? 4 : ((i >= 6) ? 3 : 2);
+                    const maxFields = (i === 1) ? 5 : ((i >= 6) ? 3 : 2);
                     for (let f = 1; f <= maxFields; f++) {
                         const field = document.getElementById(`field${f}-${i}`);
                         if (field) field.value = '';
@@ -934,7 +945,7 @@
                 iconElement.setAttribute('stroke', '#9ca3af');
 
                 // Clear fields based on step structure
-                const maxFields = (i === 1) ? 4 : ((i >= 6) ? 3 : 2);
+                const maxFields = (i === 1) ? 5 : ((i >= 6) ? 3 : 2);
                 for (let f = 1; f <= maxFields; f++) {
                     const field = document.getElementById(`field${f}-${i}`);
                     if (field) field.value = '';
@@ -1026,7 +1037,7 @@
 
                 // Restore fields based on step structure
                 if (stepData[i]) {
-                    const maxFields = (i === 1) ? 4 : ((i >= 6) ? 3 : 2);
+                    const maxFields = (i === 1) ? 5 : ((i >= 6) ? 3 : 2);
                     for (let f = 1; f <= maxFields; f++) {
                         const field = document.getElementById(`field${f}-${i}`);
                         if (field) {
@@ -1240,7 +1251,8 @@
                         'P - Population',
                         'I - Intervention/interesse',
                         'C - Sammenligning/context',
-                        'O - Resultat'
+                        'O - Resultat',
+                        'Andre overvejelser'
                     ],
                     2: [
                         'Har nogen i afdelingen viden om emnet, eller er der et lignende vidensprodukt, vi kan hente inspiration og viden fra?',
