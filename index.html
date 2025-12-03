@@ -349,7 +349,7 @@
 <body>
     <div class="container">
         <div class="progress-section">
-            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v3.0)</span></h1>
+            <h1>Steno Videncenter - Afdækning af information <span style="font-size: 0.5em; color: #999;">(v4.0)</span></h1>
 
             <div class="input-fields" style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
                 <div class="input-group">
@@ -453,16 +453,28 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-1">Ansvarlig person:</label>
-                                <input type="text" id="responsible-1" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(1, 'responsible', this.value)">
+                                <label class="input-label" for="field1-1">P - Population:</label>
+                                <input type="text" id="field1-1" class="input-field"
+                                       placeholder="Beskriv populationen..."
+                                       onchange="saveData(1, 'field1', this.value)">
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-1">Noter:</label>
-                                <textarea id="notes-1" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(1, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-1">I - Intervention/interesse:</label>
+                                <input type="text" id="field2-1" class="input-field"
+                                       placeholder="Beskriv interventionen/interessen..."
+                                       onchange="saveData(1, 'field2', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="field3-1">C - Sammenligning/context:</label>
+                                <input type="text" id="field3-1" class="input-field"
+                                       placeholder="Beskriv sammenligningen/konteksten..."
+                                       onchange="saveData(1, 'field3', this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="field4-1">O - Resultat:</label>
+                                <input type="text" id="field4-1" class="input-field"
+                                       placeholder="Beskriv resultatet..."
+                                       onchange="saveData(1, 'field4', this.value)">
                             </div>
                         </div>
                     </div>
@@ -482,16 +494,16 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-2">Ansvarlig person:</label>
-                                <input type="text" id="responsible-2" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(2, 'responsible', this.value)">
+                                <label class="input-label" for="field1-2">Har nogen i afdelingen viden om emnet, eller er der et lignende vidensprodukt, vi kan hente inspiration og viden fra?</label>
+                                <textarea id="field1-2" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(2, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-2">Noter:</label>
-                                <textarea id="notes-2" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(2, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-2">Evt. Hvem undersøger det:</label>
+                                <input type="text" id="field2-2" class="input-field small"
+                                       placeholder="Hvem er ansvarlig?"
+                                       onchange="saveData(2, 'field2', this.value)">
                             </div>
                         </div>
                     </div>
@@ -511,16 +523,16 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-3">Ansvarlig person:</label>
-                                <input type="text" id="responsible-3" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(3, 'responsible', this.value)">
+                                <label class="input-label" for="field1-3">Hvilke hjemmesider skal vi tjekke?</label>
+                                <textarea id="field1-3" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(3, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-3">Noter:</label>
-                                <textarea id="notes-3" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(3, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-3">Evt. Hvem undersøger det:</label>
+                                <input type="text" id="field2-3" class="input-field small"
+                                       placeholder="Hvem er ansvarlig?"
+                                       onchange="saveData(3, 'field2', this.value)">
                             </div>
                         </div>
                     </div>
@@ -540,16 +552,16 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-4">Ansvarlig person:</label>
-                                <input type="text" id="responsible-4" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(4, 'responsible', this.value)">
+                                <label class="input-label" for="field1-4">Mangler vi information, som vi bliver nødt til at finde forskning om? Hvad mangler vi?</label>
+                                <textarea id="field1-4" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(4, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-4">Noter:</label>
-                                <textarea id="notes-4" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(4, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-4">Hvis ja, hvem gør det?</label>
+                                <input type="text" id="field2-4" class="input-field small"
+                                       placeholder="Hvem er ansvarlig?"
+                                       onchange="saveData(4, 'field2', this.value)">
                             </div>
                         </div>
                     </div>
@@ -569,16 +581,16 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-5">Ansvarlig person:</label>
-                                <input type="text" id="responsible-5" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(5, 'responsible', this.value)">
+                                <label class="input-label" for="field1-5">Vi bruger fagpersoner til mange ting, f.eks. til at præcisere emnet, hjælpe med teknikken, til at afklare tvivlsspørgsmål i vidensafdækningen og til at validere indholdet. Skal vi bruge kompetencer, som ikke er en del af arbejdsgruppen? Hvem?</label>
+                                <textarea id="field1-5" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(5, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-5">Noter:</label>
-                                <textarea id="notes-5" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(5, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-5">Hvis ja, hvem tager kontakt?</label>
+                                <input type="text" id="field2-5" class="input-field small"
+                                       placeholder="Hvem er ansvarlig?"
+                                       onchange="saveData(5, 'field2', this.value)">
                             </div>
                         </div>
                     </div>
@@ -598,16 +610,22 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-6">Ansvarlig person:</label>
-                                <input type="text" id="responsible-6" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(6, 'responsible', this.value)">
+                                <label class="input-label" for="field1-6">Har vi allerede nu kilder, der er relevante for dette produkt? Hvilke?</label>
+                                <textarea id="field1-6" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(6, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-6">Noter:</label>
-                                <textarea id="notes-6" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(6, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-6">Hvor gemmer vi kilder og referencer?</label>
+                                <textarea id="field2-6" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(6, 'field2', this.value)"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="field3-6">Hvem har det primære overblik?</label>
+                                <input type="text" id="field3-6" class="input-field small"
+                                       placeholder="Hvem er ansvarlig?"
+                                       onchange="saveData(6, 'field3', this.value)">
                             </div>
                         </div>
                     </div>
@@ -627,16 +645,22 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-7">Ansvarlig person:</label>
-                                <input type="text" id="responsible-7" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(7, 'responsible', this.value)">
+                                <label class="input-label" for="field1-7">Har vi information nok og er den af høj nok kvalitet? Kommer den fra personer eller organisationer, vi stoler på?</label>
+                                <textarea id="field1-7" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(7, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-7">Noter:</label>
-                                <textarea id="notes-7" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(7, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-7">Er der noget, vi skal undersøge?</label>
+                                <textarea id="field2-7" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(7, 'field2', this.value)"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="field3-7">Hvis ja, hvem gør det?</label>
+                                <input type="text" id="field3-7" class="input-field small"
+                                       placeholder="Hvem er ansvarlig?"
+                                       onchange="saveData(7, 'field3', this.value)">
                             </div>
                         </div>
                     </div>
@@ -656,16 +680,22 @@
                         
                         <div class="input-fields" onclick="event.stopPropagation()">
                             <div class="input-group">
-                                <label class="input-label" for="responsible-8">Ansvarlig person:</label>
-                                <input type="text" id="responsible-8" class="input-field small" 
-                                       placeholder="Hvem er ansvarlig for dette trin?" 
-                                       onchange="saveData(8, 'responsible', this.value)">
+                                <label class="input-label" for="field1-8">Hvad er de vigtigste budskaber?</label>
+                                <textarea id="field1-8" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(8, 'field1', this.value)"></textarea>
                             </div>
                             <div class="input-group">
-                                <label class="input-label" for="notes-8">Noter:</label>
-                                <textarea id="notes-8" class="input-field textarea-field" 
-                                          placeholder="Skriv dine noter og overvejelser her..."
-                                          onchange="saveData(8, 'notes', this.value)"></textarea>
+                                <label class="input-label" for="field2-8">Er der noget, vi skal være særligt opmærksomme på i formidlingen?</label>
+                                <textarea id="field2-8" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(8, 'field2', this.value)"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="field3-8">Med hvor stor sikkerhed kan vi formidle vores budskab? Tænk over styrkemarkører.</label>
+                                <textarea id="field3-8" class="input-field textarea-field"
+                                          placeholder="Skriv dine svar her..."
+                                          onchange="saveData(8, 'field3', this.value)"></textarea>
                             </div>
                         </div>
                     </div>
@@ -691,12 +721,19 @@
 
         // Initialize data storage
         function initializeData() {
-            for (let i = 1; i <= totalSteps; i++) {
-                stepData[i] = {
-                    responsible: '',
-                    notes: ''
-                };
+            // Step 1 has 4 fields (PICO)
+            stepData[1] = { field1: '', field2: '', field3: '', field4: '' };
+
+            // Steps 2-5 have 2 fields each
+            for (let i = 2; i <= 5; i++) {
+                stepData[i] = { field1: '', field2: '' };
             }
+
+            // Steps 6-8 have 3 fields each
+            for (let i = 6; i <= 8; i++) {
+                stepData[i] = { field1: '', field2: '', field3: '' };
+            }
+
             // Set today's date as default
             const today = new Date().toISOString().split('T')[0];
             metadata.projectDate = today;
@@ -712,7 +749,14 @@
         // Save data for a step
         function saveData(stepNum, field, value) {
             if (!stepData[stepNum]) {
-                stepData[stepNum] = { responsible: '', notes: '' };
+                // Initialize with correct structure based on step
+                if (stepNum === 1) {
+                    stepData[stepNum] = { field1: '', field2: '', field3: '', field4: '' };
+                } else if (stepNum >= 2 && stepNum <= 5) {
+                    stepData[stepNum] = { field1: '', field2: '' };
+                } else {
+                    stepData[stepNum] = { field1: '', field2: '', field3: '' };
+                }
             }
             stepData[stepNum][field] = value;
             saveToLocalStorage();
@@ -820,10 +864,12 @@
                     iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
                     iconElement.setAttribute('stroke', '#9ca3af');
 
-                    const responsibleField = document.getElementById(`responsible-${i}`);
-                    const notesField = document.getElementById(`notes-${i}`);
-                    if (responsibleField) responsibleField.value = '';
-                    if (notesField) notesField.value = '';
+                    // Clear fields based on step structure
+                    const maxFields = (i === 1) ? 4 : ((i >= 6) ? 3 : 2);
+                    for (let f = 1; f <= maxFields; f++) {
+                        const field = document.getElementById(`field${f}-${i}`);
+                        if (field) field.value = '';
+                    }
                 }
 
                 updateProgress();
@@ -887,10 +933,12 @@
                 iconElement.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
                 iconElement.setAttribute('stroke', '#9ca3af');
 
-                const responsibleField = document.getElementById(`responsible-${i}`);
-                const notesField = document.getElementById(`notes-${i}`);
-                if (responsibleField) responsibleField.value = '';
-                if (notesField) notesField.value = '';
+                // Clear fields based on step structure
+                const maxFields = (i === 1) ? 4 : ((i >= 6) ? 3 : 2);
+                for (let f = 1; f <= maxFields; f++) {
+                    const field = document.getElementById(`field${f}-${i}`);
+                    if (field) field.value = '';
+                }
             }
 
             updateProgress();
@@ -976,14 +1024,15 @@
                     iconElement.setAttribute('stroke', '#9ca3af');
                 }
 
-                const responsibleField = document.getElementById(`responsible-${i}`);
-                const notesField = document.getElementById(`notes-${i}`);
-
-                if (responsibleField && stepData[i]) {
-                    responsibleField.value = stepData[i].responsible || '';
-                }
-                if (notesField && stepData[i]) {
-                    notesField.value = stepData[i].notes || '';
+                // Restore fields based on step structure
+                if (stepData[i]) {
+                    const maxFields = (i === 1) ? 4 : ((i >= 6) ? 3 : 2);
+                    for (let f = 1; f <= maxFields; f++) {
+                        const field = document.getElementById(`field${f}-${i}`);
+                        if (field) {
+                            field.value = stepData[i][`field${f}`] || '';
+                        }
+                    }
                 }
             }
 
@@ -1185,12 +1234,51 @@
                     })
                 );
 
+                // Field labels for each step
+                const fieldLabels = {
+                    1: [
+                        'P - Population',
+                        'I - Intervention/interesse',
+                        'C - Sammenligning/context',
+                        'O - Resultat'
+                    ],
+                    2: [
+                        'Har nogen i afdelingen viden om emnet, eller er der et lignende vidensprodukt, vi kan hente inspiration og viden fra?',
+                        'Evt. Hvem undersøger det'
+                    ],
+                    3: [
+                        'Hvilke hjemmesider skal vi tjekke?',
+                        'Evt. Hvem undersøger det'
+                    ],
+                    4: [
+                        'Mangler vi information, som vi bliver nødt til at finde forskning om? Hvad mangler vi?',
+                        'Hvis ja, hvem gør det?'
+                    ],
+                    5: [
+                        'Vi bruger fagpersoner til mange ting, f.eks. til at præcisere emnet, hjælpe med teknikken, til at afklare tvivlsspørgsmål i vidensafdækningen og til at validere indholdet. Skal vi bruge kompetencer, som ikke er en del af arbejdsgruppen? Hvem?',
+                        'Hvis ja, hvem tager kontakt?'
+                    ],
+                    6: [
+                        'Har vi allerede nu kilder, der er relevante for dette produkt? Hvilke?',
+                        'Hvor gemmer vi kilder og referencer?',
+                        'Hvem har det primære overblik?'
+                    ],
+                    7: [
+                        'Har vi information nok og er den af høj nok kvalitet? Kommer den fra personer eller organisationer, vi stoler på?',
+                        'Er der noget, vi skal undersøge?',
+                        'Hvis ja, hvem gør det?'
+                    ],
+                    8: [
+                        'Hvad er de vigtigste budskaber?',
+                        'Er der noget, vi skal være særligt opmærksomme på i formidlingen?',
+                        'Med hvor stor sikkerhed kan vi formidle vores budskab? Tænk over styrkemarkører.'
+                    ]
+                };
+
                 // Add each step
                 for (let i = 1; i <= totalSteps; i++) {
                     const isCompleted = completedSteps.has(i);
                     const status = isCompleted ? '✓ Gennemført' : '○ Ikke gennemført';
-                    const responsible = stepData[i]?.responsible || 'Ikke angivet';
-                    const notes = stepData[i]?.notes || 'Ingen noter';
 
                     // Step heading with blue color
                     sections.push(
@@ -1225,54 +1313,49 @@
                                     color: isCompleted ? "10b981" : "666666"
                                 })
                             ],
-                            spacing: { after: 150 }
+                            spacing: { after: 250 }
                         })
                     );
 
-                    // Responsible person
-                    sections.push(
-                        new docx.Paragraph({
-                            children: [
-                                new docx.TextRun({
-                                    text: 'Ansvarlig: ',
-                                    bold: true,
-                                    size: 22,
-                                    font: 'Calibri'
-                                }),
-                                new docx.TextRun({
-                                    text: responsible,
-                                    size: 22,
-                                    font: 'Calibri'
-                                })
-                            ],
-                            spacing: { after: 150 }
-                        })
-                    );
+                    // Add each field for this step
+                    const labels = fieldLabels[i];
+                    for (let f = 0; f < labels.length; f++) {
+                        const fieldNum = f + 1;
+                        const fieldValue = stepData[i]?.[`field${fieldNum}`] || 'Ikke udfyldt';
 
-                    // Notes heading
-                    sections.push(
-                        new docx.Paragraph({
-                            children: [
-                                new docx.TextRun({
-                                    text: 'Noter:',
-                                    bold: true,
-                                    size: 22,
-                                    font: 'Calibri'
-                                })
-                            ],
-                            spacing: { after: 100 }
-                        })
-                    );
+                        // Field label
+                        sections.push(
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({
+                                        text: labels[f] + ':',
+                                        bold: true,
+                                        size: 22,
+                                        font: 'Calibri'
+                                    })
+                                ],
+                                spacing: { after: 100 }
+                            })
+                        );
 
-                    // Notes content with light background and indentation (with clickable links)
+                        // Field content with light background and indentation (with clickable links)
+                        sections.push(
+                            new docx.Paragraph({
+                                children: textToRunsWithLinks(fieldValue, 22, 'Calibri'),
+                                spacing: { after: 200 },
+                                shading: {
+                                    fill: "F9FAFB" // Light grey background
+                                },
+                                indent: { left: 300, right: 300 }
+                            })
+                        );
+                    }
+
+                    // Add extra spacing after the last field of each step
                     sections.push(
                         new docx.Paragraph({
-                            children: textToRunsWithLinks(notes, 22, 'Calibri'),
-                            spacing: { after: 400 },
-                            shading: {
-                                fill: "F9FAFB" // Light grey background
-                            },
-                            indent: { left: 300, right: 300 }
+                            text: '',
+                            spacing: { after: 200 }
                         })
                     );
                 }
